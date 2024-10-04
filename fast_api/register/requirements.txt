@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pydantic
+typing
+python-multipart
+tortoise-orm
+asyncpg
+psycopg2
+jinja2
+databases
+sqlalchemy
+requests
+pytest
+starlette_exporter
