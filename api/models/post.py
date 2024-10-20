@@ -1,5 +1,5 @@
 from uuid import uuid4
-from sqlalchemy import Column, String, DateTime, ForeignKey, Integer
+from sqlalchemy import Column, String, DateTime, ForeignKey, Integer, Boolean
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.orm import relationship
 from .database import BaseSQL
@@ -36,3 +36,13 @@ class Cast(BaseSQL):
     film_id = Column(UUID(as_uuid=True), ForeignKey("films.id"))
 
     film = relationship("Film", back_populates="cast")
+
+
+class User(BaseSQL):
+    __tablename__ = "users"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
+    name = Column(String(500))
+    email = Column(String(500))
+    password = Column(String(500))
+    disabled = Column(Boolean)

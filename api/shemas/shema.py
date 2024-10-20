@@ -91,3 +91,36 @@ class FilmOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserIn(BaseModel):
+    name: str
+    email: str
+    password: str
+
+
+class User(BaseModel):
+    name: str
+    email: str
+    disabled: Optional[bool] = None
+
+    class Config:
+        from_attributes = True
+
+
+class UserInDB(User):
+    password: str
+
+
+class Login(BaseModel):
+    email: str
+    password: str
+    
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: str | None = None
