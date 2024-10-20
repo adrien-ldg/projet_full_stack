@@ -3,6 +3,7 @@ from sqlalchemy import Column, String, DateTime, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.orm import relationship
 from .database import BaseSQL
+from sqlalchemy import BigInteger
 
 class Film(BaseSQL):
     __tablename__ = "films"
@@ -10,12 +11,12 @@ class Film(BaseSQL):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     rank = Column(Integer, nullable=False)
     title = Column(String(500), nullable=False)
-    gross = Column(Integer, nullable=True)
+    gross = Column(BigInteger, nullable=True)
     year = Column(Integer, nullable=False)
     summary = Column(String(1000), default="")
     image = Column(String(500), default="")
     distributor = Column(String(200), default="")
-    budget = Column(Integer, nullable=True)
+    budget = Column(BigInteger, nullable=True)
     MPAA = Column(String(100), default="pg")
     genres = Column(ARRAY(String), nullable=True)
     time = Column(Integer, nullable=False)
