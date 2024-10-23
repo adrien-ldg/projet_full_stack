@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from models import post
 from shemas.shema import FilmIn, CastIn
 from typing import List
-from datetime import datetime
 
 def create_film(r: FilmIn, c: List[CastIn], db: Session):
     record = db.query(post.Film).filter(post.Film.title == r.title).first()
@@ -136,7 +135,7 @@ def get_film_by_rank(lr: int, hr: int, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Films not Found") 
     return record
 
-def get_film_by_filter(lgross: int, hgross: int, distributor: str, lbudget: int, hbudget: int, mpaa: str, genres: List[str], ltime: int, htime: int, lrelease_date: datetime, hrelease_date: datetime, casts: List[str], db: Session):
+def get_film_by_filter(lgross: int, hgross: int, distributor: str, lbudget: int, hbudget: int, mpaa: str, genres: List[str], ltime: int, htime: int,lyear: int, hyear: int, casts: List[str], db: Session):
     try:
         query = db.query(post.Film).filter(post.Film.gross >= lgross,
                                             post.Film.gross <= hgross,
@@ -144,8 +143,8 @@ def get_film_by_filter(lgross: int, hgross: int, distributor: str, lbudget: int,
                                             post.Film.budget <= hbudget,
                                             post.Film.time >= ltime,
                                             post.Film.time <= htime,
-                                            post.Film.release_date >= lrelease_date,
-                                            post.Film.release_date <= hrelease_date)
+                                            post.Film.year >= lyear,
+                                            post.Film.year <= hyear)
         if distributor:
             query = query.filter(post.Film.distributor == distributor)
         if mpaa:
