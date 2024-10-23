@@ -1,7 +1,8 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, Query
 from services import service_film
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Annotated
+from datetime import datetime
 from shemas.shema import FilmIn, FilmOut, CastIn, User
 from models.db import get_db
 from services.oauth2 import get_current_active_user
@@ -44,3 +45,8 @@ async def delete_films(title: str, db: Session = Depends(get_db), current_user: 
 @router.get("/byrank/", status_code=status.HTTP_202_ACCEPTED , response_model=List[FilmOut])
 async def get_film_by_rank(lr: int, hr: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
     return service_film.get_film_by_rank(lr, hr, db)
+
+#oui
+@router.get("/filter/", status_code=status.HTTP_202_ACCEPTED , response_model=List[FilmOut])
+async def get_film_by_filter(lgross: int, hgross: int, lbudget: int, hbudget: int, ltime: int, htime: int, lrelease_date: datetime, hrelease_date: datetime, distributor: Annotated[str, Query()] = None, mpaa: Annotated[str, Query()] = None, genres: Annotated[List[str], Query()] = None, casts: Annotated[List[str], Query()] =  None, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
+    return service_film.get_film_by_filter(lgross, hgross, distributor, lbudget, hbudget, mpaa, genres, ltime, htime, lrelease_date, hrelease_date, casts, db)

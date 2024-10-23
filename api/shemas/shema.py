@@ -14,7 +14,7 @@ class Film(BaseModel):
     summary: str
     image: str
     distributor: str
-    budget: Optional[int] = None
+    budget: int
     MPAA: str
     genres: List[str]
     time: int
@@ -44,7 +44,7 @@ class FilmIn(BaseModel):
     summary: str = ""
     image: str = ""
     distributor: str = ""
-    budget: Optional[int] = None
+    budget: int
     MPAA: str = "pg"
     genres: Optional[List[str]] = Field(default_factory=list)
     time: int

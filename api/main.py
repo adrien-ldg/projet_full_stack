@@ -23,3 +23,5 @@ app.include_router(router_authentification.router)
 @app.get("/")
 async def launch():
     return {"app": "V1"}
+
+
