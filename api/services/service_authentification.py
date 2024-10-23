@@ -8,7 +8,13 @@ from .hashing import Hash
 from . import auth_token
 
 
-def login(r: OAuth2PasswordRequestForm, db: Session):
+def login(r: OAuth2PasswordRequestForm, authentication: str, db: Session):
+    if authentication:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Session déja active. L'utilisateur est pas connecté.",
+        )
+
     user = db.query(post.User).filter(post.User.email == r.username).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
@@ -26,7 +32,7 @@ def login(r: OAuth2PasswordRequestForm, db: Session):
 
 
 def logout(response: Response, authentication: str):
-    if authentication is None:
+    if not authentication:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Aucune session active. L'utilisateur n'est pas connecté.",
