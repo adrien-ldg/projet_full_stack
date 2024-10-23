@@ -13,8 +13,8 @@ router = APIRouter(prefix="/cast", tags=["casts"])
 
 #non
 @router.post("/", status_code=status.HTTP_201_CREATED , response_model=CastOut)
-async def create_cast(film_id:UUID, c: CastIn = Depends(), db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
-        return service_cast.create_cast(c, film_id, db)
+async def create_cast(title_film:str, c: CastIn = Depends(), db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
+        return service_cast.create_cast(c, title_film, db)
 
 
 #non
@@ -42,8 +42,8 @@ async def get_all_cast(db: Session = Depends(get_db), current_user: User = Depen
 
 #non
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED , response_model=CastOut)
-async def update_cast(id: UUID, film_id: UUID = None, c: CastIn = Depends(), db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
-    return service_cast.update_cast(id, film_id, c, db)
+async def update_cast(id: UUID, title_film: str = None, c: CastIn = Depends(), db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
+    return service_cast.update_cast(id, title_film, c, db)
     
 
 #non

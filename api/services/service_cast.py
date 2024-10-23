@@ -5,13 +5,13 @@ from uuid import UUID
 from shemas.shema import CastIn
 
 
-def create_cast(c: CastIn, film_id: UUID, db: Session):
-    film = db.query(post.Film).filter(post.Film.id == film_id).first()
+def create_cast(c: CastIn, title_film: str, db: Session):
+    film = db.query(post.Film).filter(post.Film.title == title_film).first()
     if not film:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Film doesn't exist")
 
 
-    record = db.query(post.Cast).filter(post.Cast.name == c.name, post.Cast.film_id == film_id).first()
+    record = db.query(post.Cast).filter(post.Cast.name == c.name, post.Cast.film_id == film.id).first()
     if record:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cast already exists")
     
@@ -21,7 +21,7 @@ def create_cast(c: CastIn, film_id: UUID, db: Session):
             role = c.role,
             character_name = c.character_name,
             image = c.image,
-            film_id = film_id
+            film_id = film.id
         )
 
 
@@ -69,10 +69,15 @@ def get_all_cast(limit: int, db: Session,):
     
 
 
-def update_cast(id: UUID, film_id: UUID, c: CastIn, db: Session):
+def update_cast(id: UUID, title_film: str, c: CastIn, db: Session):
     record = db.query(post.Cast).filter(post.Cast.id == id).first()
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cast not found")
+    
+    if title_film:
+        film = db.query(post.Film).filter(post.Film.title == title_film).first()
+        if not film:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Film doesn't exist")
     
     try:
 
@@ -80,8 +85,8 @@ def update_cast(id: UUID, film_id: UUID, c: CastIn, db: Session):
         record.role = c.role
         record.character_name = c.character_name
         record.image = c.image
-        if film_id:
-            record.film_id = film_id
+        if title_film:
+            record.film_id = film.id
         
         db.commit()
         db.refresh(record)

@@ -11,8 +11,8 @@ router = APIRouter(prefix="/films", tags=["films"])
 
 #non
 @router.post("/", status_code=status.HTTP_201_CREATED , response_model=FilmOut)
-async def create_film(c: List[CastIn], db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), r: FilmIn = Depends()):
-        return service_film.create_film(r, c, db)
+async def create_film(cast: List[CastIn], db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), r: FilmIn = Depends()):
+        return service_film.create_film(r, cast, db)
     
 
 #oui
@@ -29,8 +29,8 @@ async def get_all_films(db: Session = Depends(get_db), current_user: User = Depe
 
 #non
 @router.put("/{title}", status_code=status.HTTP_202_ACCEPTED , response_model=FilmOut)
-async def update_films(title: str, c: List[CastIn], db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), r:FilmIn = Depends()):
-    return service_film.update_films(title, r, c, db)
+async def update_films(title: str, cast: List[CastIn], db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), r:FilmIn = Depends()):
+    return service_film.update_films(title, r, cast, db)
     
 
 #non

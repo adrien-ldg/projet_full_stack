@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 from routers import router_film, router_cast, router_user, router_authentification
 from models.database import engine, BaseSQL
+from services.oauth2 import get_current_active_user
+from shemas.shema import User
 
 
 async def lifespan(app: FastAPI):
@@ -21,7 +23,7 @@ app.include_router(router_authentification.router)
 
 
 @app.get("/")
-async def launch():
+async def launch(current_user: User = Depends(get_current_active_user)):
     return {"app": "V1"}
 
 
