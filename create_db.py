@@ -1,6 +1,6 @@
 import pandas as pd
 from api.models import post
-from api.models.database import SessionLocal
+from api.models.database import SessionLocal, engine, BaseSQL
 
 session = SessionLocal()
 
@@ -43,9 +43,10 @@ def insert_casts(session, cast_df):
 
 
 try:
+    BaseSQL.metadata.create_all(bind=engine)
     insert_films(session, film_df)
     insert_casts(session, cast_df)
-except:
+except Exception as e:
     print("Les données sont déjà dans la base de données postgres.")
 
 session.close()
