@@ -37,7 +37,6 @@ class Cast(BaseModel):
 
 
 class FilmIn(BaseModel):
-    rank: int
     title: str = Field(...)
     gross: int
     year: int

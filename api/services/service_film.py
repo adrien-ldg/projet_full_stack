@@ -1,5 +1,6 @@
 from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from models import post
 from shemas.shema import FilmIn, CastIn
 from typing import List
@@ -11,7 +12,7 @@ def create_film(r: FilmIn, c: List[CastIn], db: Session):
     
     try:
         new_film = post.Film(
-            rank = r.rank,
+            rank =  db.query(func.count(post.Film.id)).scalar() + 1,
             title = r.title,
             gross = r.gross,
             year = r.year,
@@ -71,7 +72,6 @@ def update_films(title: str, r:FilmIn, c: List[CastIn], db: Session):
     
     try:
 
-        record.rank = r.rank
         record.title = r.title
         record.gross = r.gross
         record.year = r.year
