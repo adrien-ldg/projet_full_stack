@@ -1,8 +1,7 @@
-from fastapi import HTTPException, status, Response, Cookie
+from fastapi import HTTPException, status, Response
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from typing import Annotated
 from models import post
 from .hashing import Hash
 from . import auth_token
