@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/pages/all_films.css') }}">
+</head>
+<body>
+    <div class="gallery">
+        {% for film in films %}
+        <div class="movie-item">
+            <p class="rank">{{ film.rank }}</p>
+            <img src="{{ film.image }}" alt="{{ film.title }}">
+            <p class="title">{{ film.title }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

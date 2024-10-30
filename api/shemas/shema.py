@@ -86,7 +86,7 @@ class FilmOut(BaseModel):
     time: int
     release_date: datetime
 
-    cast: List[Cast] = []
+    cast: List[CastOut] = []
 
     class Config:
         from_attributes = True

@@ -4,7 +4,7 @@ from api.models.database import SessionLocal, engine, BaseSQL
 
 session = SessionLocal()
 
-film_df = pd.read_csv('film.csv')
+film_df = pd.read_json('films.json', orient='records', lines=True)
 
 cast_df = pd.read_csv('cast.csv')
 
@@ -21,7 +21,7 @@ def insert_films(session, film_df):
             distributor=row['Domestic distributor'],
             budget=row['Budget'],
             MPAA=row['MPAA'],
-            genres=row['Genres'].split(','), 
+            genres=row['Genres'], 
             time=row['Running Time (min)'],
             release_date=row['Release Date']
         )

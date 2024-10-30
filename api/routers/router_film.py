@@ -1,4 +1,5 @@
-from fastapi import APIRouter, status, Depends, Query
+from fastapi import APIRouter, status, Depends, Query, Request
+from fastapi.responses import HTMLResponse
 from services import service_film
 from sqlalchemy.orm import Session
 from typing import List, Annotated
@@ -22,9 +23,17 @@ async def get_one_films(title: str, db: Session = Depends(get_db), current_user:
 
 
 #oui
-@router.get("/", status_code=status.HTTP_202_ACCEPTED , response_model=List[FilmOut])
-async def get_all_films(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), limit: int = 10):
-    return service_film.get_all_films(limit, db)
+@router.get("/", status_code=status.HTTP_202_ACCEPTED, response_class=HTMLResponse)
+async def get_all_films(request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), limit: int = 200):
+    templates = request.app.state.templates
+
+    films = service_film.get_all_films(limit, db)
+
+    film_out_list = [FilmOut.model_validate(film) for film in films]
+
+    print(film_out_list[0])
+
+    return templates.TemplateResponse(name="all_films.html", request=request, context={"films": film_out_list})
     
 
 #non
