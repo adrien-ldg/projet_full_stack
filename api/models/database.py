@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
-DATABASE_URL = "postgresql://postgres:Adrien.ldg02@localhost:5432/full_stack_db"
+DATABASE_URL = "postgresql://postgres:Legris-01@localhost:5432/full_stack_db"
 
 engine = create_engine(
     DATABASE_URL

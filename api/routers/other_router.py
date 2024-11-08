@@ -11,3 +11,9 @@ async def home(request: Request):
         return templates.TemplateResponse(name="home.html", request=request)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+@router.get("/test", response_class=HTMLResponse, status_code=status.HTTP_200_OK)
+async def test_page(request: Request):
+    templates = request.app.state.templates
+    return templates.TemplateResponse(name="test.html", request=request)
