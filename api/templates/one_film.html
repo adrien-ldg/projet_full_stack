@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ film.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/pages/one_film.css') }}">
+</head>
+<body>
+    
+
+    <div class="film-details">
+        <!-- Affiche du film -->
+        <div class="film-poster">
+            <img src="{{ film.image }}" alt="{{ film.title }}">
+        </div>
+        
+        <!-- Informations du film -->
+        <div class="film-info">
+            <h1>{{ film.title }}</h1>
+            {% for key, value in film.items() %}
+                {% if key != "image" and key != "title" %}
+                    <p><strong>{{ key | capitalize }}:</strong> {{ value }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        <!-- Informations de casting -->
+        <div class="film-cast">
+            <h2>Cast</h2>
+            {% if cast %}
+                <ul>
+                    <!-- Afficher les réalisateurs en premier -->
+                    {% for actor in cast %}
+                        {% if actor.role == "director" %}
+                            <li><strong>{{ actor.name }}</strong> as {{ actor.role }}</li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Afficher les acteurs ensuite -->
+                    {% for actor in cast %}
+                        {% if actor.role == "actor" %}
+                            <li>
+                                <strong>{{ actor.name }}</strong> as {{ actor.role }}
+                                {% if actor.character_name %}
+                                    as {{ actor.character_name }}
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No cast information available.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -7,12 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/pages/all_films.css') }}">
 </head>
 <body>
+   
     <div class="gallery">
         {% for film in films %}
         <div class="movie-item">
-            <p class="rank">{{ film.rank }}</p>
-            <img src="{{ film.image }}" alt="{{ film.title }}">
-            <p class="title">{{ film.title }}</p>
+            <a href="{{ url_for('get_one_films', title=film.title) }}"> <!-- Lien vers la page du film -->
+                <p class="rank">{{ film.rank }}</p>
+                <img src="{{ film.image }}" alt="{{ film.title }}">
+                <p class="title">{{ film.title }}</p>
+            </a>
         </div>
         {% endfor %}
     </div>
