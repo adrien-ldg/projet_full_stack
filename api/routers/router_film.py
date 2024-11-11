@@ -2,11 +2,11 @@ from fastapi import APIRouter, status, Depends, Query, Request
 from fastapi.responses import HTMLResponse
 from services import service_film, service_cast
 from sqlalchemy.orm import Session
-from typing import List, Annotated
+from typing import List, Annotated, Optional
 from shemas.shema import FilmIn, FilmOut, CastIn, User
 from models.db import get_db
 from services.oauth2 import get_current_active_user
-
+from fastapi.templating import Jinja2Templates
 router = APIRouter(prefix="/films", tags=["films"])
 
 
@@ -35,28 +35,7 @@ async def get_one_films(title: str, request: Request, db: Session = Depends(get_
     return templates.TemplateResponse("one_film.html", {"request": request, "film": film_dict, "cast": cast})
 
 
-"""
-#oui
-@router.get("/{title}", status_code=status.HTTP_202_ACCEPTED, response_class=HTMLResponse)
-async def get_one_films(title: str, request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
-    # Récupérer le film depuis le service
-    film = service_film.get_one_films(title, db)
-    
-    # Si le film n'est pas trouvé, renvoyer une erreur 404
-    if not film:
-        return HTMLResponse(content="Film non trouvé", status_code=status.HTTP_404_NOT_FOUND)
-    
-    # Convertir l'objet film en dictionnaire
-    film_dict = film.__dict__
-    
-    # Supprimer la clé `_sa_instance_state` générée par SQLAlchemy, qui n'est pas nécessaire dans le template
-    film_dict.pop('_sa_instance_state', None)
 
-    # Passer le dictionnaire film au template
-    templates = request.app.state.templates
-    return templates.TemplateResponse("one_film.html", {"request": request, "film": film_dict})
-
-"""
 
 #oui
 @router.get("/", status_code=status.HTTP_202_ACCEPTED, response_class=HTMLResponse)
@@ -91,6 +70,39 @@ async def get_film_by_rank(lr: int, hr: int, db: Session = Depends(get_db), curr
     return service_film.get_film_by_rank(lr, hr, db)
 
 #oui
-@router.get("/filter/", status_code=status.HTTP_202_ACCEPTED , response_model=List[FilmOut])
-async def get_film_by_filter(lgross: int, hgross: int, lbudget: int, hbudget: int, ltime: int, htime: int, lyear: int, hyear: int, distributor: Annotated[str, Query()] = None, mpaa: Annotated[str, Query()] = None, genres: Annotated[List[str], Query()] = None, casts: Annotated[List[str], Query()] =  None, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
-    return service_film.get_film_by_filter(lgross, hgross, distributor, lbudget, hbudget, mpaa, genres, ltime, htime, lyear, hyear, casts, db)
+templates = Jinja2Templates(directory="templates")
+@router.get("/filter/", status_code=status.HTTP_202_ACCEPTED, response_class=HTMLResponse)
+async def get_film_by_filter(
+    request: Request,
+    lgross: Optional[str] = Query(None),
+    hgross: Optional[str] = Query(None),
+    distributor: Optional[str] = Query(None),
+    lbudget: Optional[str] = Query(None),
+    hbudget: Optional[str] = Query(None),
+    mpaa: Optional[str] = Query(None),
+    genres: Optional[List[str]] = Query(None),
+    ltime: Optional[str] = Query(None),
+    htime: Optional[str] = Query(None),
+    lyear: Optional[str] = Query(None),
+    hyear: Optional[str] = Query(None),
+    casts: Optional[List[str]] = Query(None),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
+    # Convertir les valeurs en entiers si elles sont fournies et non vides, sinon appliquer des valeurs par défaut
+    lgross = int(lgross) if lgross and lgross.isdigit() else 0
+    hgross = int(hgross) if hgross and hgross.isdigit() else 8000000000
+    lbudget = int(lbudget) if lbudget and lbudget.isdigit() else 0
+    hbudget = int(hbudget) if hbudget and hbudget.isdigit() else 8000000000
+    ltime = int(ltime) if ltime and ltime.isdigit() else 0
+    htime = int(htime) if htime and htime.isdigit() else 800
+    lyear = int(lyear) if lyear and lyear.isdigit() else 1900
+    hyear = int(hyear) if hyear and hyear.isdigit() else 2100
+
+    # Obtenir les films filtrés depuis le service
+    films = service_film.get_film_by_filter(
+        lgross, hgross, distributor, lbudget, hbudget, mpaa, genres, ltime, htime, lyear, hyear, casts, db
+    )
+
+    # Renvoyer les films au template all_films.html
+    return templates.TemplateResponse("all_films.html", {"request": request, "films": films})

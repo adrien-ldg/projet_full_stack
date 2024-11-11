@@ -7,17 +7,87 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/pages/all_films.css') }}">
 </head>
 <body>
-   
-    <div class="gallery">
-        {% for film in films %}
-        <div class="movie-item">
-            <a href="{{ url_for('get_one_films', title=film.title) }}"> <!-- Lien vers la page du film -->
-                <p class="rank">{{ film.rank }}</p>
-                <img src="{{ film.image }}" alt="{{ film.title }}">
-                <p class="title">{{ film.title }}</p>
-            </a>
+
+
+    <div class="container">
+        <!-- Formulaire de filtre -->
+        <form action="/films/filter/" method="get" class="filter-form">
+            <h2>Filter Films</h2>
+            <!-- Champs de filtre pour les valeurs numériques -->
+            <div class="filter-group">
+                <label for="lgross">Minimum Gross:</label>
+                <input type="number" name="lgross" placeholder="Minimum Gross">
+
+                <label for="hgross">Maximum Gross:</label>
+                <input type="number" name="hgross" placeholder="Maximum Gross">
+
+                <label for="lbudget">Minimum Budget:</label>
+                <input type="number" name="lbudget" placeholder="Minimum Budget">
+
+                <label for="hbudget">Maximum Budget:</label>
+                <input type="number" name="hbudget" placeholder="Maximum Budget">
+
+                <label for="ltime">Minimum Time (minutes):</label>
+                <input type="number" name="ltime" placeholder="Minimum Time">
+
+                <label for="htime">Maximum Time (minutes):</label>
+                <input type="number" name="htime" placeholder="Maximum Time">
+
+                <label for="lyear">Minimum Year:</label>
+                <input type="number" name="lyear" placeholder="Minimum Year">
+
+                <label for="hyear">Maximum Year:</label>
+                <input type="number" name="hyear" placeholder="Maximum Year">
+            </div>
+
+            <!-- Menus déroulants pour les choix multiples -->
+            <div class="filter-group">
+                <label for="distributor">Distributor:</label>
+                <select name="distributor">
+                    <option value="">Select Distributor</option>
+                    <option value="Distributor1">Distributor 1</option>
+                    <option value="Distributor2">Distributor 2</option>
+                </select>
+
+                <label for="mpaa">MPAA Rating:</label>
+                <select name="mpaa">
+                    <option value="">Select MPAA</option>
+                    <option value="G">G</option>
+                    <option value="PG">PG</option>
+                    <option value="PG-13">PG-13</option>
+                    <option value="R">R</option>
+                </select>
+
+                <label for="genres">Genres:</label>
+                <select name="genres" multiple>
+                    <option value="Action">Action</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Drama">Drama</option>
+                </select>
+
+                <label for="casts">Cast Members:</label>
+                <select name="casts" multiple>
+                    <option value="Actor1">Actor 1</option>
+                    <option value="Actor2">Actor 2</option>
+                </select>
+            </div>
+
+            <button type="submit" class="filter-button">Apply Filters</button>
+        </form>
+
+        <!-- Galerie de films -->
+        <div class="gallery">
+            {% for film in films %}
+            <div class="movie-item">
+                <a href="{{ url_for('get_one_films', title=film.title) }}">
+                    <p class="rank">{{ film.rank }}</p>
+                    <img src="{{ film.image }}" alt="{{ film.title }}">
+                    <p class="title">{{ film.title }}</p>
+                </a>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </body>
 </html>

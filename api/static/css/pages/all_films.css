@@ -1,44 +1,131 @@
+/* Réinitialisation de base */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-  }
-  
-  body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #f4f4f4;
-  }
-  
-  .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* Sets exactly three columns per row */
-      gap: 20px;
-      max-width: 900px;
-      padding: 20px;
-      border: 2px solid #ddd;
-      background-color: #fff;
-  }
-  
-  .movie-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-  }
-  
-  .movie-item img {
-      width: 100%;
-      height: auto;
-      max-width: 150px;
-      border-radius: 8px;
-  }
-  
-  .title, .rank {
-      margin-top: 10px;
-      font-size: 1em;
-      text-align: center;
-  }
+}
+
+/* Style pour le corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Conteneur principal */
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Style du formulaire de filtre */
+.filter-form {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 0 auto 20px; /* Centrer le formulaire et ajouter un espacement avec la galerie */
+}
+
+.filter-form h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.filter-group label {
+    flex: 1 1 150px;
+    font-weight: bold;
+}
+
+.filter-group input,
+.filter-group select {
+    flex: 1 1 200px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.filter-button {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-button:hover {
+    background-color: #555;
+}
+
+/* Style de la galerie de films */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto; /* Centrer la galerie */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.movie-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: white;
+    overflow: hidden;
+}
+
+.movie-item img {
+    width: 100%;
+    height: auto;
+    max-width: 150px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    transition: opacity 0.2s ease;
+}
+
+.movie-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.movie-item .title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.movie-item .rank {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+/* Responsive design pour petits écrans */
+@media (max-width: 768px) {
+    .filter-group {
+        flex-direction: column;
+    }
+}
