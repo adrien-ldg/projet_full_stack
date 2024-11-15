@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/pages/all_films.css') }}">
 </head>
 <body>
-
-
     <div class="container">
         <!-- Formulaire de filtre -->
         <form action="/films/filter/" method="get" class="filter-form">
@@ -85,6 +83,23 @@
                     <img src="{{ film.image }}" alt="{{ film.title }}">
                     <p class="title">{{ film.title }}</p>
                 </a>
+                <div class="movie-preview">
+                    <div class="preview-header">
+                        <h3 class="preview-title">{{ film.title }}</h3>
+                        <p class="preview-year">{{ film.year }}</p>
+                    </div>
+                    <div class="preview-info">
+                        <p><span>Rating:</span> {{ film.mpaa }}</p>
+                        <p><span>Runtime:</span> {{ film.time }} min</p>
+                        <p><span>Budget:</span> ${{ '{:,.0f}'.format(film.budget) }}</p>
+                        <p><span>Gross:</span> ${{ '{:,.0f}'.format(film.gross) }}</p>
+                    </div>
+                    <div class="preview-genres">
+                        {% for genre in film.genres %}
+                            <span class="genre-tag">{{ genre }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
