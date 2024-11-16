@@ -3,104 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Films</title>
+    <title>Films Gallery</title>
     <link rel="stylesheet" href="{{ url_for('static', path='css/pages/all_films.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
+        <header class="header">
+            <h1>Discover Movies</h1>
+            <button class="toggle-filters" aria-label="Toggle filters">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+            </button>
+        </header>
+
         <!-- Formulaire de filtre -->
         <form action="/films/filter/" method="get" class="filter-form">
-            <h2>Filter Films</h2>
-            <!-- Champs de filtre pour les valeurs numériques -->
-            <div class="filter-group">
-                <label for="lgross">Minimum Gross:</label>
-                <input type="number" name="lgross" placeholder="Minimum Gross">
-
-                <label for="hgross">Maximum Gross:</label>
-                <input type="number" name="hgross" placeholder="Maximum Gross">
-
-                <label for="lbudget">Minimum Budget:</label>
-                <input type="number" name="lbudget" placeholder="Minimum Budget">
-
-                <label for="hbudget">Maximum Budget:</label>
-                <input type="number" name="hbudget" placeholder="Maximum Budget">
-
-                <label for="ltime">Minimum Time (minutes):</label>
-                <input type="number" name="ltime" placeholder="Minimum Time">
-
-                <label for="htime">Maximum Time (minutes):</label>
-                <input type="number" name="htime" placeholder="Maximum Time">
-
-                <label for="lyear">Minimum Year:</label>
-                <input type="number" name="lyear" placeholder="Minimum Year">
-
-                <label for="hyear">Maximum Year:</label>
-                <input type="number" name="hyear" placeholder="Maximum Year">
+            <div class="filter-section">
+                <h2>Numeric Filters</h2>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label for="lgross">Min Gross</label>
+                        <input type="number" id="lgross" name="lgross" placeholder="0">
+                    </div>
+                    <div class="filter-group">
+                        <label for="hgross">Max Gross</label>
+                        <input type="number" id="hgross" name="hgross" placeholder="1000000">
+                    </div>
+                    <div class="filter-group">
+                        <label for="lbudget">Min Budget</label>
+                        <input type="number" id="lbudget" name="lbudget" placeholder="0">
+                    </div>
+                    <div class="filter-group">
+                        <label for="hbudget">Max Budget</label>
+                        <input type="number" id="hbudget" name="hbudget" placeholder="1000000">
+                    </div>
+                    <div class="filter-group">
+                        <label for="ltime">Min Duration</label>
+                        <input type="number" id="ltime" name="ltime" placeholder="60">
+                    </div>
+                    <div class="filter-group">
+                        <label for="htime">Max Duration</label>
+                        <input type="number" id="htime" name="htime" placeholder="240">
+                    </div>
+                    <div class="filter-group">
+                        <label for="lyear">From Year</label>
+                        <input type="number" id="lyear" name="lyear" placeholder="1900">
+                    </div>
+                    <div class="filter-group">
+                        <label for="hyear">To Year</label>
+                        <input type="number" id="hyear" name="hyear" placeholder="2024">
+                    </div>
+                </div>
             </div>
 
-            <!-- Menus déroulants pour les choix multiples -->
-            <div class="filter-group">
-                <label for="distributor">Distributor:</label>
-                <select name="distributor">
-                    <option value="">Select Distributor</option>
-                    <option value="Distributor1">Distributor 1</option>
-                    <option value="Distributor2">Distributor 2</option>
-                </select>
-
-                <label for="mpaa">MPAA Rating:</label>
-                <select name="mpaa">
-                    <option value="">Select MPAA</option>
-                    <option value="G">G</option>
-                    <option value="PG">PG</option>
-                    <option value="PG-13">PG-13</option>
-                    <option value="R">R</option>
-                </select>
-
-                <label for="genres">Genres:</label>
-                <select name="genres" multiple>
-                    <option value="Action">Action</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Comedy">Comedy</option>
-                    <option value="Drama">Drama</option>
-                </select>
-
-                <label for="casts">Cast Members:</label>
-                <select name="casts" multiple>
-                    <option value="Actor1">Actor 1</option>
-                    <option value="Actor2">Actor 2</option>
-                </select>
+            <div class="filter-section">
+                <h2>Categories</h2>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label for="distributor">Distributor</label>
+                        <select id="distributor" name="distributor" class="select-custom">
+                            <option value="">All Distributors</option>
+                            <option value="Distributor1">Distributor 1</option>
+                            <option value="Distributor2">Distributor 2</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="mpaa">MPAA Rating</label>
+                        <select id="mpaa" name="mpaa" class="select-custom">
+                            <option value="">All Ratings</option>
+                            <option value="G">G</option>
+                            <option value="PG">PG</option>
+                            <option value="PG-13">PG-13</option>
+                            <option value="R">R</option>
+                        </select>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label for="genres">Genres</label>
+                        <select id="genres" name="genres" multiple class="select-custom">
+                            <option value="Action">Action</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Comedy">Comedy</option>
+                            <option value="Drama">Drama</option>
+                        </select>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label for="casts">Cast Members</label>
+                        <select id="casts" name="casts" multiple class="select-custom">
+                            <option value="Actor1">Actor 1</option>
+                            <option value="Actor2">Actor 2</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <button type="submit" class="filter-button">Apply Filters</button>
+            <div class="filter-actions">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+            </div>
         </form>
 
         <!-- Galerie de films -->
         <div class="gallery">
             {% for film in films %}
-            <div class="movie-item">
-                <a href="{{ url_for('get_one_films', title=film.title) }}">
-                    <p class="rank">{{ film.rank }}</p>
-                    <img src="{{ film.image }}" alt="{{ film.title }}">
-                    <p class="title">{{ film.title }}</p>
+            <article class="movie-card">
+                <a href="{{ url_for('get_one_films', title=film.title) }}" class="movie-link">
+                    <div class="movie-poster">
+                        <img src="{{ film.image }}" alt="{{ film.title }}" loading="lazy">
+                        <div class="movie-overlay">
+                            <div class="movie-details">
+                                <h3>{{ film.title }}</h3>
+                                <div class="movie-meta">
+                                    <span>{{ film.year }}</span>
+                                    <span>{{ film.time }} min</span>
+                                    <span>{{ film.mpaa }}</span>
+                                </div>
+                                <div class="movie-genres">
+                                    {% for genre in film.genres %}
+                                    <span class="genre-tag">{{ genre }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <h3>{{ film.title }}</h3>
+                        <p>{{ film.year }}</p>
+                    </div>
                 </a>
-                <div class="movie-preview">
-                    <div class="preview-header">
-                        <h3 class="preview-title">{{ film.title }}</h3>
-                        <p class="preview-year">{{ film.year }}</p>
-                    </div>
-                    <div class="preview-info">
-                        <p><span>Rating:</span> {{ film.mpaa }}</p>
-                        <p><span>Runtime:</span> {{ film.time }} min</p>
-                        <p><span>Budget:</span> ${{ '{:,.0f}'.format(film.budget) }}</p>
-                        <p><span>Gross:</span> ${{ '{:,.0f}'.format(film.gross) }}</p>
-                    </div>
-                    <div class="preview-genres">
-                        {% for genre in film.genres %}
-                            <span class="genre-tag">{{ genre }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+            </article>
             {% endfor %}
         </div>
     </div>

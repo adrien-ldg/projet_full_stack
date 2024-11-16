@@ -36,7 +36,7 @@ async def get_cast_one_name(name: str, db: Session = Depends(get_db), current_us
 
 #oui
 @router.get("/", status_code=status.HTTP_202_ACCEPTED , response_model=List[CastOut])
-async def get_all_cast(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), limit: int = 10):
+async def get_all_cast(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user), limit: int = 80000):
     return service_cast.get_all_cast(limit, db)
 
 
