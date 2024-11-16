@@ -74,22 +74,22 @@ templates = Jinja2Templates(directory="templates")
 @router.get("/filter/", status_code=status.HTTP_202_ACCEPTED, response_class=HTMLResponse)
 async def get_film_by_filter(
     request: Request,
-    lgross: Optional[str] = Query(None),
-    hgross: Optional[str] = Query(None),
-    distributor: Optional[str] = Query(None),
-    lbudget: Optional[str] = Query(None),
-    hbudget: Optional[str] = Query(None),
-    mpaa: Optional[str] = Query(None),
-    genres: Optional[List[str]] = Query(None),
-    ltime: Optional[str] = Query(None),
-    htime: Optional[str] = Query(None),
-    lyear: Optional[str] = Query(None),
-    hyear: Optional[str] = Query(None),
-    casts: Optional[List[str]] = Query(None),
+    lgross: Optional[str] = Query(None),  # Min gross
+    hgross: Optional[str] = Query(None),  # Max gross
+    distributor: Optional[str] = Query(None),  # Distributor
+    lbudget: Optional[str] = Query(None),  # Min budget
+    hbudget: Optional[str] = Query(None),  # Max budget
+    mpaa: Optional[str] = Query(None),  # MPAA rating
+    genres: Optional[List[str]] = Query(None),  # Selected genres
+    ltime: Optional[str] = Query(None),  # Min runtime
+    htime: Optional[str] = Query(None),  # Max runtime
+    lyear: Optional[str] = Query(None),  # Min year
+    hyear: Optional[str] = Query(None),  # Max year
+    casts: Optional[List[str]] = Query(None),  # Selected cast members
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    # Convertir les valeurs en entiers si elles sont fournies et non vides, sinon appliquer des valeurs par défaut
+    # Convertir les valeurs en entiers si elles sont fournies
     lgross = int(lgross) if lgross and lgross.isdigit() else 0
     hgross = int(hgross) if hgross and hgross.isdigit() else 8000000000
     lbudget = int(lbudget) if lbudget and lbudget.isdigit() else 0
@@ -99,10 +99,50 @@ async def get_film_by_filter(
     lyear = int(lyear) if lyear and lyear.isdigit() else 1900
     hyear = int(hyear) if hyear and hyear.isdigit() else 2100
 
-    # Obtenir les films filtrés depuis le service
-    films = service_film.get_film_by_filter(
-        lgross, hgross, distributor, lbudget, hbudget, mpaa, genres, ltime, htime, lyear, hyear, casts, db
-    )
+    # Obtenir tous les films
+    films = service_film.get_all_films(limit=200, db=db)
 
-    # Renvoyer les films au template all_films.html
-    return templates.TemplateResponse("all_films.html", {"request": request, "films": films})
+    # Appliquer les filtres
+    filtered_films = []
+
+    for film in films:
+        # Vérifier les genres
+        film_genres = (
+            film.genres
+            if isinstance(film.genres, list)
+            else film.genres.strip("[]").replace("'", "").split(", ")
+        )
+        if genres and not any(selected_genre in film_genres for selected_genre in genres):
+            continue
+
+        # Vérifier les critères numériques
+        if not (lgross <= film.gross <= hgross):
+            continue
+        if not (lbudget <= film.budget <= hbudget):
+            continue
+        if not (ltime <= film.time <= htime):
+            continue
+        if not (lyear <= film.year <= hyear):
+            continue
+
+        # Vérifier le distributeur
+        if distributor and film.distributor != distributor:
+            continue
+
+        # Vérifier le MPAA rating
+        if mpaa and film.mpaa != mpaa:
+            continue
+
+        # Vérifier les castings
+        if casts and not any(cast in film.casts for cast in casts):
+            continue
+
+        # Si toutes les conditions sont respectées, ajouter le film à la liste filtrée
+        filtered_films.append(film)
+
+    # Retourner les films filtrés au template
+    templates = request.app.state.templates
+    return templates.TemplateResponse(
+        "all_films.html",
+        {"request": request, "films": filtered_films}
+    )
