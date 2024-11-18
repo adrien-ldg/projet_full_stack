@@ -89,19 +89,22 @@ async def get_film_by_filter(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    # Convertir les valeurs en entiers si elles sont fournies
-    lgross = int(lgross) if lgross and lgross.isdigit() else 0
-    hgross = int(hgross) if hgross and hgross.isdigit() else 8000000000
-    lbudget = int(lbudget) if lbudget and lbudget.isdigit() else 0
-    hbudget = int(hbudget) if hbudget and hbudget.isdigit() else 8000000000
-    ltime = int(ltime) if ltime and ltime.isdigit() else 0
-    htime = int(htime) if htime and htime.isdigit() else 800
-    lyear = int(lyear) if lyear and lyear.isdigit() else 1900
-    hyear = int(hyear) if hyear and hyear.isdigit() else 2100
+    # Convertir les valeurs numériques en entiers ou infini si absentes
+    lgross = int(lgross) if lgross and lgross.isdigit() else float('-inf')
+    hgross = int(hgross) if hgross and hgross.isdigit() else float('inf')
+    lbudget = int(lbudget) if lbudget and lbudget.isdigit() else float('-inf')
+    hbudget = int(hbudget) if hbudget and hbudget.isdigit() else float('inf')
+    ltime = int(ltime) if ltime and ltime.isdigit() else float('-inf')
+    htime = int(htime) if htime and htime.isdigit() else float('inf')
+    lyear = int(lyear) if lyear and lyear.isdigit() else float('-inf')
+    hyear = int(hyear) if hyear and hyear.isdigit() else float('inf')
+
 
     # Obtenir tous les films
     films = service_film.get_all_films(limit=200, db=db)
-
+    if not any([lgross, hgross, lbudget, hbudget, ltime, htime, lyear, hyear, distributor, mpaa, genres, casts]):
+        templates = request.app.state.templates
+        return templates.TemplateResponse("all_films.html", {"request": request, "films": films})
     # Appliquer les filtres
     filtered_films = []
 
@@ -134,8 +137,11 @@ async def get_film_by_filter(
             continue
 
         # Vérifier les castings
-        if casts and not any(cast in film.casts for cast in casts):
-            continue
+        if casts:
+            film_cast_names = [cast.name for cast in film.cast]
+            if not any(selected_cast in film_cast_names for selected_cast in casts):
+                continue
+
 
         # Si toutes les conditions sont respectées, ajouter le film à la liste filtrée
         filtered_films.append(film)
@@ -146,3 +152,16 @@ async def get_film_by_filter(
         "all_films.html",
         {"request": request, "films": filtered_films}
     )
+@router.get("/distributors/", status_code=status.HTTP_200_OK)
+async def get_unique_distributors(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    # Récupérer tous les films
+    films = service_film.get_all_films(limit=200, db=db)
+
+    # Extraire les distributeurs uniques
+    distributors = {film.distributor for film in films if film.distributor}
+    
+    # Retourner une liste triée
+    return sorted(distributors)

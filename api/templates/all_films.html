@@ -74,9 +74,7 @@
                     <div class="filter-group">
                         <label for="distributor">Distributor</label>
                         <select id="distributor" name="distributor" class="select-custom">
-                            <option value="">All Distributors</option>
-                            <option value="Distributor1">Distributor 1</option>
-                            <option value="Distributor2">Distributor 2</option>
+                            <!-- Options dynamiques ajoutées ici -->
                         </select>
                     </div>
                     <div class="filter-group">
@@ -97,13 +95,12 @@
                             <option value="crime">crime</option>
                             <option value="thriller">thriller</option>
                             <option value="adventure">adventure</option>
-                            <option value="thriller">history</option>
+                            <option value="history">history</option>
                             <option value="comedy">comedy</option>
                             <option value="romance">romance</option>
                             <option value="fantasy">fantasy</option>
                             <option value="animation">animation</option>
                             <option value="family">family</option>
-                            <option value="comedy">comedy</option>
                             <option value="musical">musical</option>
                             <option value="mystery">mystery</option>
                         </select>
@@ -111,8 +108,7 @@
                     <div class="filter-group full-width">
                         <label for="casts">Cast Members</label>
                         <select id="casts" name="casts" multiple class="select-custom">
-                            <option value="Actor1">Actor 1</option>
-                            <option value="Actor2">Actor 2</option>
+                            <!-- Options dynamiques ajoutées ici -->
                         </select>
                     </div>
                 </div>
@@ -122,6 +118,7 @@
                 <button type="reset" class="btn btn-secondary">Reset</button>
                 <button type="submit" class="btn btn-primary">Apply Filters</button>
             </div>
+            
         </form>
 
         <!-- Galerie de films -->
@@ -156,5 +153,58 @@
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const castSelect = document.getElementById("casts");
+            const distributorSelect = document.getElementById("distributor");
+    
+            try {
+                // Requête pour récupérer les acteurs
+                const responseActors = await fetch("/cast/");
+                if (!responseActors.ok) {
+                    throw new Error("Erreur lors du chargement des acteurs.");
+                }
+    
+                const actors = await responseActors.json();
+    
+                // Trier et ajouter les acteurs
+                actors.sort((a, b) => a.name.localeCompare(b.name));
+                actors.forEach(actor => {
+                    const option = document.createElement("option");
+                    option.value = actor.name;
+                    option.textContent = actor.name;
+                    castSelect.appendChild(option);
+                });
+    
+                // Requête pour récupérer les distributeurs
+                const responseDistributors = await fetch("/films/distributors/");
+                if (!responseDistributors.ok) {
+                    throw new Error("Erreur lors du chargement des distributeurs.");
+                }
+    
+                const distributors = await responseDistributors.json();
+    
+                // Trier les distributeurs par ordre alphabétique
+                distributors.sort((a, b) => a.localeCompare(b));
+    
+                // Ajouter une option par défaut
+                const defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = "All Distributors";
+                distributorSelect.appendChild(defaultOption);
+    
+                // Ajouter les distributeurs triés
+                distributors.forEach(distributor => {
+                    const option = document.createElement("option");
+                    option.value = distributor;
+                    option.textContent = distributor;
+                    distributorSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Erreur :", error);
+            }
+        });
+    </script>
 </body>
 </html>

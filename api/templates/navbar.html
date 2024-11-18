@@ -6,44 +6,87 @@
                 <li class="nav-item second"><a href="/">Home</a></li>
                 <li class="nav-item third"><a href="/films">Films</a></li>
                 <li class="nav-item fourth"><a href="javascript:void(0);" onclick="openLoginModal()">Sign In</a></li>
-                <li class="nav-item fifth"><a href="/">Sign Up</a></li>
-                <li class="nav-item sixth"><a href="/test">Test</a></li>
+                <li class="nav-item fifth"><a href="javascript:void(0);" onclick="openSignUpModal()">Sign Up</a></li>
+                <li class="nav-item sixth"><a href="/logout" onclick="logoutUser()">Logout</a></li>
             </ul>
         </nav>
     </div>
+
+    <!-- Modal de connexion -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLoginModal()">&times;</span>
             <h2>Connectez-vous</h2>
-            <form id="loginForm" method="POST" action="/login/">
+            <form id="loginForm" method="POST" action="/login/" enctype="application/x-www-form-urlencoded">
                 <label for="username">Nom d'utilisateur</label>
                 <input type="text" id="username" name="username" required>
-                
+
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" name="password" required>
-                
+
                 <button type="submit">Se connecter</button>
             </form>
         </div>
     </div>
-    
+
+    <!-- Modal d'inscription -->
+    <div id="signUpModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSignUpModal()">&times;</span>
+            <h2>Inscrivez-vous</h2>
+            <form id="signUpForm" method="POST" action="/user/" enctype="application/x-www-form-urlencoded">
+                <label for="newUsername">Nom d'utilisateur</label>
+                <input type="text" id="newUsername" name="name" required> <!-- 'name' attendu par le backend -->
+
+                <label for="newPassword">Mot de passe</label>
+                <input type="password" id="newPassword" name="password" required> <!-- 'password' attendu -->
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required> <!-- 'email' attendu -->
+
+                <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </div>
 </header>
+
 <script>
-    // Fonction pour afficher le modal de connexion
+    // Gestion des modals
     function openLoginModal() {
         document.getElementById("loginModal").style.display = "block";
     }
 
-    // Fonction pour fermer le modal de connexion
     function closeLoginModal() {
         document.getElementById("loginModal").style.display = "none";
     }
 
-    // Fermer le modal si l'utilisateur clique en dehors de la fenêtre
-    window.onclick = function(event) {
-        var modal = document.getElementById("loginModal");
-        if (event.target == modal) {
-            modal.style.display = "none";
+    function openSignUpModal() {
+        document.getElementById("signUpModal").style.display = "block";
+    }
+
+    function closeSignUpModal() {
+        document.getElementById("signUpModal").style.display = "none";
+    }
+
+    // Fermer les modals en cliquant à l'extérieur
+    window.onclick = function (event) {
+        if (event.target == document.getElementById("loginModal")) {
+            closeLoginModal();
+        }
+        if (event.target == document.getElementById("signUpModal")) {
+            closeSignUpModal();
         }
     };
+
+    // Gestion du logout
+    function logoutUser() {
+        fetch("/logout/", {
+            method: "POST",
+            credentials: "include"
+        }).then((response) => {
+            if (response.ok) {
+                window.location.href = "/";
+            }
+        });
+    }
 </script>
