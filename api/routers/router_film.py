@@ -46,7 +46,6 @@ async def get_all_films(request: Request, db: Session = Depends(get_db), current
 
     film_out_list = [FilmOut.model_validate(film) for film in films]
 
-    print(film_out_list[0])
 
     return templates.TemplateResponse(name="all_films.html", request=request, context={"films": film_out_list})
     
@@ -99,7 +98,7 @@ async def get_film_by_filter(
     lyear = int(lyear) if lyear and lyear.isdigit() else float('-inf')
     hyear = int(hyear) if hyear and hyear.isdigit() else float('inf')
 
-
+    
     # Obtenir tous les films
     films = service_film.get_all_films(limit=200, db=db)
     if not any([lgross, hgross, lbudget, hbudget, ltime, htime, lyear, hyear, distributor, mpaa, genres, casts]):
@@ -110,12 +109,12 @@ async def get_film_by_filter(
 
     for film in films:
         # Vérifier les genres
-        film_genres = (
+        """film_genres = (
             film.genres
             if isinstance(film.genres, list)
             else film.genres.strip("[]").replace("'", "").split(", ")
-        )
-        if genres and not any(selected_genre in film_genres for selected_genre in genres):
+        )"""
+        if genres and not all(selected_genre in film.genres for selected_genre in genres):
             continue
 
         # Vérifier les critères numériques
@@ -129,11 +128,11 @@ async def get_film_by_filter(
             continue
 
         # Vérifier le distributeur
-        if distributor and film.distributor != distributor:
+        if distributor and film.distributor == distributor:
             continue
 
         # Vérifier le MPAA rating
-        if mpaa and film.mpaa != mpaa:
+        if mpaa and film.MPAA == mpaa:
             continue
 
         # Vérifier les castings
@@ -152,6 +151,9 @@ async def get_film_by_filter(
         "all_films.html",
         {"request": request, "films": filtered_films}
     )
+    
+    
+    
 @router.get("/distributors/", status_code=status.HTTP_200_OK)
 async def get_unique_distributors(
     db: Session = Depends(get_db),
@@ -159,9 +161,8 @@ async def get_unique_distributors(
 ):
     # Récupérer tous les films
     films = service_film.get_all_films(limit=200, db=db)
-
     # Extraire les distributeurs uniques
     distributors = {film.distributor for film in films if film.distributor}
-    
+    print(distributors)
     # Retourner une liste triée
     return sorted(distributors)
