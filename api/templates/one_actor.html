@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ actor_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/pages/one_actor.css') }}">
+</head>
+<body>
+    <div class="actor-details">
+        <!-- En-tête avec le nom de l'acteur -->
+        <header class="actor-header">
+            <h1>Films of {{ actor_name }}</h1>
+        </header>
+
+        <!-- Liste des films -->
+        <div class="films-gallery">
+            {% for film in films %}
+            <article class="film-card">
+                <a href="{{ url_for('get_one_films', title=film.film['title']) }}" class="film-link">
+                    <div class="film-poster">
+                        <img src="{{ film.film['image'] }}" alt="{{ film.film['title'] }}" loading="lazy">
+                    </div>
+                    <div class="film-info">
+                        <h3>{{ film.film['title'] }}</h3>
+                        <p><strong>Year:</strong> {{ film.film['year'] }}</p>
+                        <p><strong>Role:</strong> {{ film.character_name }}</p>
+                    </div>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

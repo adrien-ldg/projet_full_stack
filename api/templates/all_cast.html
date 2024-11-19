@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actors Gallery</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/pages/all_cast.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Discover Actors</h1>
+        </header>
+
+        <!-- Galerie des acteurs -->
+        <div class="gallery">
+            {% set unique_casts = {} %}
+            {% for cast in casts %}
+                {% if cast.name not in unique_casts %}
+                    {% set _ = unique_casts.update({cast.name: cast}) %}
+                    <article class="actor-card">
+                        <a href="{{ url_for('get_cast_one_name', name=cast.name) }}" class="actor-link">
+
+                            <div class="actor-photo">
+                                <img src="{{ cast.image }}" alt="{{ cast.name }}" loading="lazy">
+                            </div>
+                            <div class="actor-info">
+                                <h3>{{ cast.name }}</h3>
+                            </div>
+                        </a>
+                    </article>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    
+</body>
+</html>
