@@ -81,10 +81,10 @@
                         <label for="mpaa">MPAA Rating</label>
                         <select id="mpaa" name="mpaa" class="select-custom">
                             <option value="">All Ratings</option>
-                            <option value="G">G</option>
-                            <option value="PG">PG</option>
-                            <option value="PG-13">PG-13</option>
-                            <option value="R">R</option>
+                            <option value="g">G</option>
+                            <option value="pg">PG</option>
+                            <option value="pg-13">PG-13</option>
+                            <option value="r">R</option>
                         </select>
                     </div>
                     <div class="filter-group full-width">
@@ -161,7 +161,7 @@
     
             try {
                 // Requête pour récupérer les acteurs
-                const responseActors = await fetch("/cast/");
+                const responseActors = await fetch("/cast/list/");
                 if (!responseActors.ok) {
                     throw new Error("Erreur lors du chargement des acteurs.");
                 }

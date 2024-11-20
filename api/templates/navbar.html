@@ -18,37 +18,39 @@
         <div class="modal-content">
             <span class="close" onclick="closeLoginModal()">&times;</span>
             <h2>Connectez-vous</h2>
-            <form id="loginForm" method="POST" action="/login/" enctype="application/x-www-form-urlencoded">
+            <form id="loginForm" onsubmit="handleLogin(event)">
                 <label for="username">Nom d'utilisateur</label>
                 <input type="text" id="username" name="username" required>
-
+            
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" name="password" required>
-
+            
                 <button type="submit">Se connecter</button>
             </form>
+            
         </div>
     </div>
 
-    <!-- Modal d'inscription -->
     <div id="signUpModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeSignUpModal()">&times;</span>
             <h2>Inscrivez-vous</h2>
-            <form id="signUpForm" method="POST" action="/user/" enctype="application/x-www-form-urlencoded">
-                <label for="newUsername">Nom d'utilisateur</label>
-                <input type="text" id="newUsername" name="name" required> <!-- 'name' attendu par le backend -->
-
-                <label for="newPassword">Mot de passe</label>
-                <input type="password" id="newPassword" name="password" required> <!-- 'password' attendu -->
-
+            <form id="signUpForm" onsubmit="handleSignUp(event)">
+                <label for="name">Nom d'utilisateur</label>
+                <input type="text" id="newUsername" name="name" required>
+    
+                <label for="password">Mot de passe</label>
+                <input type="password" id="newPassword" name="password" required>
+    
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required> <!-- 'email' attendu -->
-
+                <input type="email" id="email" name="email" required>
+    
                 <button type="submit">S'inscrire</button>
             </form>
         </div>
     </div>
+    
+    
 </header>
 
 <script>
@@ -90,4 +92,98 @@
             }
         });
     }
+</script>
+<script>
+    async function handleLogin(event) {
+        event.preventDefault(); // Empêche la redirection de la page
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        const data = {
+            username: formData.get("username"),
+            password: formData.get("password")
+        };
+
+        try {
+            const response = await fetch("/login/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams(data)
+            });
+
+            if (response.ok) {
+                // Succès : recharge ou met à jour la page
+                alert("Connexion réussie !");
+                window.location.reload();
+            } else {
+                // Gestion des erreurs
+                const error = await response.json();
+                alert(error.detail || "Erreur de connexion");
+            }
+        } catch (err) {
+            console.error("Erreur réseau : ", err);
+            alert("Une erreur est survenue. Veuillez réessayer.");
+        }
+    }
+    async function handleSignUp(event) {
+        event.preventDefault(); // Empêche la redirection par défaut du formulaire.
+        console.log("Données envoyées :", new URLSearchParams(data).toString());
+        const form = event.target;
+        const formData = new FormData(form); // Récupère les données du formulaire.
+    
+        const data = {
+            name: formData.get("name"),
+            password: formData.get("password"),
+            email: formData.get("email")
+        };
+    
+        const button = form.querySelector("button");
+        button.disabled = true; // Désactiver le bouton pendant la requête.
+        button.textContent = "Création...";
+    
+        try {
+            const response = await fetch("/user/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams(data)
+            });
+    
+            if (response.ok) {
+                // Inscription réussie
+                alert("Compte créé avec succès !");
+                closeSignUpModal(); // Fermer la modal après succès
+            } else {
+                // Gestion des erreurs (par exemple, validation échouée)
+                const error = await response.json();
+                displaySignUpError(error.detail || "Erreur lors de la création du compte.");
+            }
+        } catch (err) {
+            console.error("Erreur réseau : ", err);
+            displaySignUpError("Erreur réseau. Veuillez réessayer.");
+        } finally {
+            button.disabled = false; // Réactiver le bouton
+            button.textContent = "S'inscrire";
+        }
+    }
+    
+    // Afficher un message d'erreur dans le formulaire Sign Up
+    function displaySignUpError(message) {
+        const form = document.getElementById("signUpForm");
+        let errorElement = form.querySelector(".error-message");
+    
+        if (!errorElement) {
+            // Crée une nouvelle zone d'erreur si elle n'existe pas
+            errorElement = document.createElement("div");
+            errorElement.className = "error-message";
+            form.prepend(errorElement); // Ajoute le message d'erreur en haut du formulaire
+        }
+    
+        errorElement.textContent = message; // Met à jour le message d'erreur.
+    }
+    
 </script>

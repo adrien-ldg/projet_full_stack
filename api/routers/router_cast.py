@@ -23,6 +23,14 @@ async def create_cast(title_film:str, c: CastIn = Depends(), db: Session = Depen
 async def get_one_cast(id: UUID, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
     return service_cast.get_one_cast(id, db)
 
+@router.get("/list/", status_code=status.HTTP_200_OK, response_model=List[CastOut])
+async def list_all_casts(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    casts = service_cast.get_all_cast(limit=2000, db=db)
+    unique_casts = {cast.name: cast for cast in casts}.values()
+    return sorted(unique_casts, key=lambda cast: cast.name)  # Trié par ordre alphabétique
 
 #oui
 @router.get("/cast_film/{title}", status_code=status.HTTP_202_ACCEPTED , response_model=List[CastOut])

@@ -128,11 +128,11 @@ async def get_film_by_filter(
             continue
 
         # Vérifier le distributeur
-        if distributor and film.distributor == distributor:
+        if distributor and film.distributor != distributor:
             continue
 
         # Vérifier le MPAA rating
-        if mpaa and film.MPAA == mpaa:
+        if mpaa and film.MPAA != mpaa:
             continue
 
         # Vérifier les castings
@@ -163,6 +163,5 @@ async def get_unique_distributors(
     films = service_film.get_all_films(limit=200, db=db)
     # Extraire les distributeurs uniques
     distributors = {film.distributor for film in films if film.distributor}
-    print(distributors)
     # Retourner une liste triée
     return sorted(distributors)
