@@ -5,54 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ film.title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', path='css/pages/one_film.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 </head>
 <body>
-    
+    <div class="container">
+        <div class="film-details">
+            <div class="film-header">
+                <div class="film-poster">
+                    <img src="{{ film.image }}" alt="{{ film.title }}">
+                </div>
+                
+                <div class="film-info">
+                    <a href="{{ url_for('home') }}" class="home-button">Home</a>
+                    <h1>{{ film.title }}</h1>
+                    <div class="info-grid">
+                        {% set excluded_keys = ["image", "title", "_sa_instance_state", "id"] %}
+                        {% for key, value in film.items() %}
+                            {% if key not in excluded_keys %}
+                                <div class="info-item">
+                                    <span class="info-label">{{ key | capitalize }}</span>
+                                    <span class="info-value">
+                                        {% if key == "genres" and value is iterable %}
+                                            {{ value | join(", ") }}
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+            </div>
 
-    <div class="film-details">
-        <!-- Affiche du film -->
-        <div class="film-poster">
-            <img src="{{ film.image }}" alt="{{ film.title }}">
-        </div>
-        
-        <!-- Informations du film -->
-        <div class="film-info">
-            <h1>{{ film.title }}</h1>
-            {% for key, value in film.items() %}
-                {% if key != "image" and key != "title" %}
-                    <p><strong>{{ key | capitalize }}:</strong> {{ value }}</p>
+            <div class="film-cast">
+                <h2>Cast & Crew</h2>
+                {% if cast %}
+                    <div class="cast-grid">
+                        <!-- Section pour les réalisateurs -->
+                        <div class="cast-section">
+                            <h3>Directors</h3>
+                            <ul>
+                                {% for director in cast %}
+                                    {% if director.role == "director" %}
+                                        <li class="cast-card">
+                                            <a href="{{ url_for('get_cast_one_name', name=director.name) }}" class="cast-link">
+                                                <span class="cast-name">{{ director.name }}</span>
+                                            </a>
+                                            <span class="cast-role">Director</span>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+            
+                        <!-- Section pour les acteurs -->
+                        <div class="cast-section">
+                            <h3>Actors</h3>
+                            <ul>
+                                {% for actor in cast %}
+                                    {% if actor.role == "actor" %}
+                                        <li class="cast-card">
+                                            <a href="{{ url_for('get_cast_one_name', name=actor.name) }}" class="cast-link">
+                                                <span class="cast-name">{{ actor.name }}</span>
+                                            </a>
+                                            <span class="cast-role">
+                                                {% if actor.character_name %}
+                                                    as {{ actor.character_name }}
+                                                {% else %}
+                                                    Actor
+                                                {% endif %}
+                                            </span>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="no-cast">No cast information available.</p>
                 {% endif %}
-            {% endfor %}
-        </div>
-        
-        <!-- Informations de casting -->
-        <div class="film-cast">
-            <h2>Cast</h2>
-            {% if cast %}
-                <ul>
-                    <!-- Afficher les réalisateurs en premier -->
-                    {% for actor in cast %}
-                        {% if actor.role == "director" %}
-                            <li><strong>{{ actor.name }}</strong> as {{ actor.role }}</li>
-                        {% endif %}
-                    {% endfor %}
-
-                    <!-- Afficher les acteurs ensuite -->
-                    {% for actor in cast %}
-                        {% if actor.role == "actor" %}
-                            <li>
-                                <strong>{{ actor.name }}</strong> as {{ actor.role }}
-                                {% if actor.character_name %}
-                                    as {{ actor.character_name }}
-                                {% endif %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No cast information available.</p>
-            {% endif %}
-        </div>
+            </div>
+            
+            
     </div>
 </body>
 </html>
