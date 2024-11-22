@@ -1,414 +1,505 @@
-# Readme
+# Projet de Fullstack data : Les 200 films les plus rentables de l'histoire
 
-This project is a comprehensive Film Management API built with FastAPI, offering a robust platform for managing and exploring movie data. The API provides detailed information about films, their cast members, and related metadata, with features designed for both casual users and film enthusiasts.
+Ce projet est une API de gestion de films construite avec FastAPI, 
+offrant une plateforme robuste pour la gestion et 
+l'exploration des données cinématographiques. 
+L'API fournit des informations détaillées sur les
+ 200 films ayant eu le plus de succès au box office mondial 
+ (à la date du 1er Octobre 2024), 
+ leurs casting et des métadonnées associées 
+ telles que le budget, la date de sortie etc. 
+ Cette application possède des fonctionnalités destinées à la fois aux utilisateurs occasionnels
+ et aux passionnés de cinéma.
 
-## Project Overview
+Nous avons récupérées ces données sur les sites [Rotten Tomatoes](https://www.rottentomatoes.com/) (pour chaque film) ainsi que sur le site [box office mojo](https://www.boxofficemojo.com/chart/ww_top_lifetime_gross/?ref_=bo_lnav_hm_shrt)
 
-### Key Features
-- Complete CRUD operations for films and cast members
-- Advanced filtering system for movies based on multiple criteria:
-  - Box office performance (gross earnings)
-  - Budget ranges
-  - Release years
-  - Running time
-  - MPAA ratings
+## Exécution du projet
+
+
+
+## Aperçu du Projet
+
+### Principales Fonctionnalités
+
+- Opérations CRUD (Create, Read, Update, Delete) complètes pour les films et les membres du casting
+- Système avancé de filtrage des films basé sur plusieurs critères :
+  - Performance au box-office (recettes brutes)
+  - Plages de budgets
+  - Années de sortie
+  - Durée
+  - Classifications MPAA
   - Genres
-  - Cast members
-- User authentication and authorization system
-- Detailed cast information management
-- Modern web interface for easy data interaction
+  - Casting + Réalisateur
+- Système d'authentification et d'autorisation des utilisateurs
+- Gestion détaillée des informations du casting
+- Interface web moderne pour une interaction facile avec les données
 
-### Technical Stack
-- **Backend Framework**: FastAPI (Python)
-- **Database**: PostgreSQL
-- **Authentication**: JWT-based authentication system
-- **Documentation**: Automatic OpenAPI/Swagger documentation
-- **Frontend**: Server-side rendered templates with Jinja2
-- **Styling**: Modern CSS with responsive design
+### Pile Technologique
 
-### Data Management
-Our database contains comprehensive film information including:
-- Title and ranking
-- Financial data (gross earnings, budget)
-- Release information (year, date)
-- Content details (summary, MPAA rating, genres)
-- Technical specifications (running time)
-- Cast information (actors, directors, writers)
-- Media assets (film and cast images)
+- **Framework Backend** : FastAPI (Python)
+- **Base de données** : PostgreSQL
+- **Authentification** : Système d'authentification basé sur JWT
+- **Documentation** : Documentation automatique OpenAPI/Swagger
+- **Frontend** : Modèles rendus côté serveur avec Jinja2
+- **Style** : CSS moderne avec design réactif
 
-# Data Structure
+### Gestion des Données
 
-## Database Organization
-Our PostgreSQL database is structured around three main entities:
+Notre base de données contient des informations complètes sur les films, y compris :
 
-### Films Table
-The central entity storing movie information with:
-- Unique identifiers and ranking
-- Core movie details (title, summary)
-- Financial metrics (gross earnings, budget)
-- Technical information (runtime, MPAA rating)
-- Categorization (genres stored as arrays)
-- Temporal data (release date, production year)
-- Marketing assets (promotional images)
+- Titre et classement
+- Données financières (recettes brutes, budget)
+- Informations sur la sortie (année, date)
+- Détails du contenu (résumé, classification MPAA, genres)
+- Spécifications techniques (durée)
+- Informations sur le casting (acteurs, réalisateurs, scénaristes)
+- Assets médiatiques (images des films et du casting)
 
-### Cast Table
-A related entity managing all cast members with:
-- Unique UUID for each cast entry
-- Personal information (name, image)
-- Role classification (actor, director, writer)
-- Character information for actors
-- Relationship to films through foreign keys
+# Structure des Données
 
-### Users Table
-Manages application users and authentication with:
-- Unique identifiers for each user
-- Authentication details (email, hashed password)
-- Profile information (name)
-- Account status (active/disabled)
-- Access control information
+## Organisation de la Base de Données
 
-## Data Relationships
-- Each film can have multiple cast members
-- Cast members can be associated with multiple films
-- Roles are flexible, allowing the same person to be listed as both actor and director
-- Users can interact with films and cast data based on their authentication
-- All relationships are maintained through proper database constraints
+Notre base de données PostgreSQL est structurée autour de trois entités principales :
 
-## Data Security
-- Sensitive operations require authentication
-- Passwords are securely hashed
-- Data integrity is enforced through database constraints
-- Regular backups ensure data persistence
-- Input validation through Pydantic schemas
-- JWT-based authentication for secure user sessions
+### Table des Films
+
+L'entité centrale stockant les informations sur les films avec :
+
+- Identifiants uniques et classement
+- Détails principaux du film (titre, résumé)
+- Métriques financières (recettes brutes, budget)
+- Informations techniques (durée, classification MPAA)
+- Catégorisation (genres stockés sous forme de tableaux)
+- Données temporelles (date de sortie, année de production)
+- Assets marketing (images promotionnelles)
+
+### Table du Casting
+
+Une entité liée gérant tous les membres du casting avec :
+
+- UUID unique pour chaque entrée de casting
+- Informations personnelles (nom, image)
+- Classification des rôles (acteur, réalisateur, scénariste)
+- Informations sur les personnages pour les acteurs
+- Relation avec les films via des clés étrangères
+
+### Table des Utilisateurs
+
+Gère les utilisateurs de l'application et l'authentification avec :
+
+- Identifiants uniques pour chaque utilisateur
+- Détails d'authentification (email, mot de passe haché)
+- Informations de profil (nom)
+- Statut du compte (actif/désactivé)
+- Informations de contrôle d'accès
+
+## Relations entre les Données
+
+- Chaque film peut avoir plusieurs membres du casting
+- Les membres du casting peuvent être associés à plusieurs films
+- Les rôles sont flexibles, permettant à une même personne d'être listée comme acteur et réalisateur
+- Les utilisateurs peuvent interagir avec les données des films et du casting en fonction de leur authentification
+- Toutes les relations sont maintenues via des contraintes appropriées dans la base de données
+
+## Sécurité des Données
+
+- Les opérations sensibles nécessitent une authentification
+- Les mots de passe sont sécurisés par hachage
+- L'intégrité des données est assurée par des contraintes de base de données
+- Des sauvegardes régulières garantissent la persistance des données
+- Validation des entrées via les schémas Pydantic
+- Authentification basée sur JWT pour des sessions utilisateur sécurisées
 
 # Architecture
 
-The API is organized into a well-structured modular architecture within the `api` directory. Here's a detailed breakdown of each component:
+L'API est organisée dans une architecture modulaire bien structurée au sein du répertoire `api`. Voici une description détaillée de chaque composant :
 
-## Main Application (`main.py`)
-- Entry point of the application that initializes the FastAPI instance
-- Configures middleware (Prometheus for metrics)
-- Sets up static files and Jinja2 templates
-- Includes all routers for different endpoints
-- Manages database lifecycle through lifespan events
+## Application Principale (`main.py`)
 
-## Models (`/models`)
-- Defines SQLAlchemy ORM models for database tables
-- `database.py`: Database connection and base configuration
-- `post.py`: Contains data models for Films, Cast, and Users
-- Handles relationships between different entities
+- Point d'entrée de l'application qui initialise l'instance FastAPI
+- Configure les middleware (Prometheus pour les métriques)
+- Configure les fichiers statiques et les modèles Jinja2
+- Inclut tous les routeurs pour les différents points de terminaison
+- Gère le cycle de vie de la base de données à travers des événements de cycle de vie
 
-## Routers (`/routers`)
-Each router handles specific functionality with its own endpoints:
-- `router_film.py`: 
-  - CRUD operations for films
-  - Advanced filtering and ranking endpoints
-  - Supports pagination and complex queries
-- `router_cast.py`:
-  - Manages cast members (actors, directors, writers)
-  - Links cast members to films
-  - Supports filtering by name and film
-- `router_user.py`:
-  - User management endpoints
-  - Profile operations
-- `router_authentication.py`:
-  - Handles login/logout
-  - JWT token management
-- `other_router.py`:
-  - Serves the home page and other general endpoints
+## Modèles (`/models`)
 
-## API Endpoints
+- Définit les modèles ORM SQLAlchemy pour les tables de la base de données
+- `database.py` : Connexion à la base de données et configuration de base
+- `post.py` : Contient les modèles de données pour les Films, Casting, et Utilisateurs
+- Gère les relations entre les différentes entités
 
-The API is organized into several routers, each handling specific functionality:
+## Routeurs (`/routers`)
 
-### Film Router (`/films`)
-1. **List and Search**
-   - `GET /films/`: Get all films with pagination
-   - `GET /films/{title}`: Get specific film by title
-   - `GET /films/filter/`: Advanced filtering with multiple parameters:
-     * Gross earnings range
-     * Budget range
-     * Running time range
-     * Year range
-     * Distributor
-     * MPAA rating
-     * Genres
-     * Cast members
-   - `GET /films/byrank/`: Get films within specific rank range
+Chaque routeur gère une fonctionnalité spécifique avec ses propres points de terminaison :
 
-2. **Management**
-   - `POST /films/`: Create new film with cast
-   - `PUT /films/{title}`: Update existing film
-   - `DELETE /films/{title}`: Delete film
+- `router_film.py` :
+  - Opérations CRUD pour les films
+  - Points de terminaison de filtrage et de classement avancé
+  - Supporte la pagination et les requêtes complexes
+- `router_cast.py` :
+  - Gère les membres du casting (acteurs, réalisateurs, scénaristes)
+  - Lie les membres du casting aux films
+  - Supporte le filtrage par nom et film
+- `router_user.py` :
+  - Points de terminaison de gestion des utilisateurs
+  - Opérations sur le profil
+- `router_authentication.py` :
+  - Gère la connexion/déconnexion
+  - Gestion des tokens JWT
+- `other_router.py` :
+  - Sert la page d'accueil et d'autres points de terminaison généraux
 
-### Cast Router (`/cast`)
-1. **List and Search**
-   - `GET /cast/`: Get all cast members
-   - `GET /cast/{id}`: Get specific cast member
-   - `GET /cast/cast_name/{name}`: Search cast by name
-   - `GET /cast/cast_film/{title}`: Get all cast for specific film
+## Points de Terminaison de l'API
 
-2. **Management**
-   - `POST /cast/`: Add new cast member to film
-   - `PUT /cast/{id}`: Update cast member
-   - `DELETE /cast/{id}`: Remove cast member
+L'API est organisée en plusieurs routeurs, chacun gérant une fonctionnalité spécifique :
 
-### User Router (`/user`)
-1. **User Management**
-   - `POST /user/`: Create new user account
-   - `GET /user/me/`: Get current user profile
+### Routeur Film (`/films`)
 
-### Authentication Router
-1. **Session Management**
-   - `POST /login/`: User login
-   - `POST /logout/`: User logout
+1. **Liste et Recherche**
 
-### Other Router
-   - other function to enhance the user experience 
+   - `GET /films/` : Récupérer tous les films avec pagination
+   - `GET /films/{title}` : Récupérer un film spécifique par titre
+   - `GET /films/filter/` : Filtrage avancé avec plusieurs paramètres :
+     - Plage des recettes brutes
+     - Plage des budgets
+     - Plage de durée
+     - Plage d'années
+     - Distributeur
+     - Classification MPAA
+     - Genres
+     - Membres du casting
+   - `GET /films/byrank/` : Obtenir des films dans une plage de classement spécifique
 
-### Common Features Across Routers
-1. **Authentication**
-   - All endpoints (except login/register) require authentication
-   - Uses `get_current_active_user` dependency
+2. **Gestion**
 
-2. **Response Models**
-   - Consistent use of Pydantic models
-   - Proper status codes for different operations:
-     * 201: Resource created
-     * 202: Request accepted
-     * 401: Unauthorized
-     * 404: Not found
-     * 409: Conflict
+   - `POST /films/` : Créer un nouveau film avec casting
+   - `PUT /films/{title}` : Mettre à jour un film existant
+   - `DELETE /films/{title}` : Supprimer un film
 
-3. **Database Integration**
-   - All routes use SQLAlchemy session
-   - Proper error handling for database operations
+### Routeur Casting (`/cast`)
 
-4. **Input Validation**
-   - Query parameters validation
-   - Request body validation through Pydantic
-   - Type checking and conversion
+1. **Liste et Recherche**
+
+   - `GET /cast/` : Récupérer tous les membres du casting
+   - `GET /cast/{id}` : Récupérer un membre du casting spécifique
+   - `GET /cast/cast_name/{name}` : Rechercher un membre du casting par nom
+   - `GET /cast/cast_film/{title}` : Récupérer tout le casting pour un film spécifique
+
+2. **Gestion**
+
+   - `POST /cast/` : Ajouter un nouveau membre au casting d'un film
+   - `PUT /cast/{id}` : Mettre à jour un membre du casting
+   - `DELETE /cast/{id}` : Supprimer un membre du casting
+
+### Routeur Utilisateur (`/user`)
+
+1. **Gestion des Utilisateurs**
+   - `POST /user/` : Créer un nouveau compte utilisateur
+   - `GET /user/me/` : Récupérer le profil de l'utilisateur actuel
+
+### Routeur d'Authentification
+
+1. **Gestion de Session**
+   - `POST /login/` : Connexion de l'utilisateur
+   - `POST /logout/` : Déconnexion de l'utilisateur
+
+### Autres Routeurs
+
+- Autres fonctions pour améliorer l'expérience utilisateur
+
+### Fonctionnalités Communes aux Routeurs
+
+1. **Authentification**
+
+   - Tous les points de terminaison (sauf connexion/enregistrement) nécessitent une authentification
+   - Utilisation de la dépendance `get_current_active_user`
+
+2. **Modèles de Réponse**
+
+   - Utilisation cohérente des modèles Pydantic
+   - Codes d'état appropriés pour différentes opérations :
+     - 201 : Ressource créée
+     - 202 : Requête acceptée
+     - 401 : Non autorisé
+     - 404 : Non trouvé
+     - 409 : Conflit
+
+3. **Intégration à la Base de Données**
+
+   - Toutes les routes utilisent une session SQLAlchemy
+   - Gestion appropriée des erreurs pour les opérations de base de données
+
+4. **Validation des Entrées**
+
+   - Validation des paramètres de requête
+   - Validation du corps de la requête via Pydantic
+   - Vérification et conversion des types
 
 ## Services (`/services`)
-Business logic layer that separates database operations from route handlers:
-- `service_film.py`: Film-related business logic
-- `service_cast.py`: Cast management operations
-- `service_user.py`: User management logic
-- `service_authentication.py`: Authentication and authorization logic
-- `oauth2.py`: OAuth2 implementation with JWT
-- `hashing.py`: Password hashing utilities
-- `auth_token.py`: Token generation and validation
 
-## Services Layer
+Couche de logique métier qui sépare les opérations de base de données des gestionnaires de route :
 
-The services layer acts as the layer of the application, separating the database operations from the route handlers. Each service module is responsible for specific functionality:
+- `service_film.py` : Logique métier liée aux films
+- `service_cast.py` : Opérations de gestion du casting
+- `service_user.py` : Logique de gestion des utilisateurs
+- `service_authentication.py` : Logique d'authentification et d'autorisation
+- `oauth2.py` : Implémentation OAuth2 avec JWT
+- `hashing.py` : Utilitaires de hachage de mots de passe
+- `auth_token.py` : Génération et validation de tokens
 
-### Film Service
-- Manages all film-related operations
-- Handles complex queries and filters
-- Manages film rankings
-- Coordinates film and cast relationships
-- Implements data validation and error handling
-- Handles database transactions for film operations
+## Couche des Services
 
-### Cast Service
-- Manages cast member information
-- Links cast members to films
-- Handles cast member searches
-- Provides cast filtering capabilities
-- Manages cast member updates and deletions
-- Ensures data integrity for cast-film relationships
+La couche des services agit comme la couche d'application, séparant les opérations de base de données des gestionnaires de route. Chaque module de service est responsable d'une fonctionnalité spécifique :
 
-### Authentication Service
-- Implements secure user authentication
-- Manages JWT token creation and validation
-- Handles session management
-- Implements secure cookie handling
-- Provides logout functionality
-- Manages user sessions and token expiration
+### Service Film
 
-### User Service
-- Handles user account management
-- Implements secure password hashing
-- Manages user profiles
-- Handles user registration
-- Validates user credentials
-- Manages user status (active/inactive)
+- Gère toutes les opérations liées aux films
+- Gère les requêtes et les filtres complexes
+- Gère le classement des films
+- Coordonne les relations entre films et casting
+- Implémente la validation des données et la gestion des erreurs
+- Gère les transactions de base de données pour les opérations sur les films
 
-### Common Service Features
-1. **Error Handling**
-   - Consistent error responses
-   - Detailed error messages
-   - HTTP status code mapping
-   - Database transaction management
+### Service Casting
 
-2. **Security**
-   - Password hashing with bcrypt
-   - Secure token management
-   - Session validation
-   - Input validation and sanitization
+- Gère les informations des membres du casting
+- Lie les membres du casting aux films
+- Gère les recherches de membres du casting
+- Fournit des capacités de filtrage des membres du casting
+- Gère les mises à jour et les suppressions des membres du casting
+- Assure l'intégrité des données pour les relations casting-film
 
-3. **Database Operations**
-   - Transaction management
-   - CRUD operations
-   - Relationship handling
-   - Query optimization
+### Service d'Authentification
 
-## Schemas (`/schemas`)
-The schemas directory contains Pydantic models that define the structure of our data. We use a pattern of having separate "In" and "Out" schemas for our entities. Here's why:
+- Implémente une authentification sécurisée des utilisateurs
+- Gère la création et la validation des tokens JWT
+- Gère la gestion des sessions
+- Implémente la gestion sécurisée des cookies
+- Fournit des fonctionnalités de déconnexion
+- Gère les sessions utilisateur et l'expiration des tokens
 
-### Input vs Output Schemas
+### Service Utilisateur
 
-#### Film Schemas (`FilmIn` vs `FilmOut`)
-- **Input Schema (`FilmIn`)**:
-  - Used when creating or updating films
-  - Contains only the fields that users should be able to provide
-  - Has default values for optional fields to simplify data creation
-  - Doesn't include auto-generated fields like `rank`
-  - Relationships (like cast) are handled through separate endpoints
+- Gère la gestion des comptes utilisateurs
+- Implémente le hachage sécurisé des mots de passe
+- Gère les profils utilisateurs
+- Gère l'enregistrement des utilisateurs
+- Valide les identifiants des utilisateurs
+- Gère le statut des utilisateurs (actif/inactif)
 
-- **Output Schema (`FilmOut`)**:
-  - Used when sending film data to clients
-  - Includes additional computed or database-generated fields (like `rank`)
-  - Contains nested relationships (includes full `cast` list of all films)
-  - Makes certain fields optional to handle partial data
-  - Provides a complete view of the film with all its relationships
+### Fonctionnalités Communes aux Services
 
-#### Cast Schemas (`CastIn` vs `CastOut`)
-- **Input Schema (`CastIn`)**:
-  - Focused on the essential data needed to create a cast entry
-  - Simpler structure without relationship data
-  - Uses default values for optional fields
-  - Doesn't include the associated film data
+1. **Gestion des Erreurs**
 
-- **Output Schema (`CastOut`)**:
-  - Includes the complete film relationship
-  - Provides more context by including related film information
-  - Used when returning detailed cast information
-  - Better handles optional fields for display purposes
+   - Réponses d'erreur cohérentes
+   - Messages d'erreur détaillés
+   - Mappage des codes d'état HTTP
+   - Gestion des transactions de base de données
 
-### Why This Separation?
+2. **Sécurité**
 
-1. **Data Control**:
-   - Input schemas limit what users can send to the API
-   - Output schemas provide richer, more complete data back to users
-   - This separation helps prevent unwanted data manipulation
+   - Hachage des mots de passe avec bcrypt
+   - Gestion sécurisée des tokens
+   - Validation des sessions
+   - Validation et assainissement des entrées
 
-2. **Relationship Handling**:
-   - Input: Keeps relationships simple (using IDs or separate requests)
-   - Output: Includes full relationship data for better data consumption
+3. **Opérations sur la Base de Données**
 
-3. **Validation Logic**:
-   - Input: Stricter validation for data creation/updates
-   - Output: More flexible structure for displaying data
+   - Gestion des transactions
+   - Opérations CRUD
+   - Gestion des relations
+   - Optimisation des requêtes
 
-4. **Security**:
-   - Input: Prevents users from setting sensitive or computed fields
-   - Output: Includes additional fields that are safe to expose
+## Schémas (`/schemas`)
 
-5. **User Experience**:
-   - Input: Simpler structure makes it easier to create/update data
-   - Output: Richer data structure provides complete information in a single response
+Le répertoire schemas contient des modèles Pydantic qui définissent la structure de nos données. Nous utilisons un modèle distinct "In" et "Out" pour chaque entité. Voici pourquoi :
 
-This separation of concerns helps maintain a clean, secure, and user-friendly API while ensuring data integrity and proper validation.
+### Schémas d'Entrée vs Schémas de Sortie
 
-## Static Files (`/static`)
-- CSS stylesheets for frontend styling
-- JavaScript files for client-side functionality
-- Images and other media assets
-- Organized by type (css, js, images)
+#### Schémas de Film (`FilmIn` vs `FilmOut`)
 
-## Templates (`/templates`)
-- Jinja2 HTML templates for server-side rendering
-- Includes base templates and page-specific templates
-- Supports template inheritance and reusable components
+- **Schéma d'Entrée (********`FilmIn`********\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*)** :
 
-## Security Features
-### Authentication System
-The API implements a robust authentication system using JWT (JSON Web Tokens) with secure cookie-based storage:
+  - Utilisé lors de la création ou de la mise à jour des films
+  - Contient uniquement les champs que les utilisateurs doivent pouvoir fournir
+  - Possède des valeurs par défaut pour les champs optionnels afin de simplifier la création des données
+  - N'inclut pas les champs auto-générés comme `rank`
+  - Les relations (comme le casting) sont gérées via des points de terminaison séparés
 
-#### Login Process
-1. **User Authentication**:
-   - Users provide email and password via the `/login` endpoint
-   - Credentials are validated against the database
-   - Passwords are verified using bcrypt hashing
+- **Schéma de Sortie (********`FilmOut`********\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*)** :
 
-2. **Token Management**:
-   - Upon successful login, a JWT token is generated
-   - Token contains user email in its payload
-   - Token is signed using HS256 algorithm with a secure key
+  - Utilisé lors de l'envoi de données de film aux clients
+  - Inclut des champs additionnels calculés ou générés par la base de données (comme `rank`)
+  - Contient des relations imbriquées (comprend la liste complète du `casting` des films)
+  - Rend certains champs optionnels pour gérer les données partielles
+  - Fournit une vue complète du film avec toutes ses relations
 
-3. **Cookie Security**:
-   - Token is stored in an HTTP-only cookie named "authentication"
-   - Cookie settings:
-     - `httponly`: True (prevents JavaScript access)
-     - `secure`: True (only sent over HTTPS)
-     - `samesite`: "strict" (prevents CSRF attacks)
-     - `max_age`: 12 hours (automatic expiration)
+#### Schémas de Casting (`CastIn` vs `CastOut`)
 
-#### Session Management
-1. **Active Session Check**:
-   - System prevents multiple concurrent logins
-   - Checks for existing authentication cookie
-   - Returns appropriate error if session already exists
+- **Schéma d'Entrée (********`CastIn`********\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*)** :
 
-2. **Access Control**:
-   - Protected endpoints require valid authentication
-   - Token is automatically validated on each request
-   - Invalid or expired tokens trigger 401 Unauthorized responses
+  - Axé sur les données essentielles nécessaires pour créer une entrée de casting
+  - Structure plus simple sans données de relation
+  - Utilise des valeurs par défaut pour les champs optionnels
+  - N'inclut pas les données associées aux films
 
-3. **User Status Verification**:
-   - System checks if user account is active
-   - Disabled accounts cannot access protected resources
-   - Automatic validation through `get_current_active_user`
+- **Schéma de Sortie (********`CastOut`********\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*)** :
 
-#### Logout Process
-1. **Session Termination**:
-   - `/logout` endpoint handles session ending
-   - Authentication cookie is deleted
-   - Server validates session existence before logout
+  - Inclut la relation complète avec le film
+  - Fournit plus de contexte en incluant les informations relatives aux films
+  - Utilisé lors de la restitution d'informations détaillées sur le casting
+  - Gère mieux les champs optionnels à des fins d'affichage
 
-### Libraries and Dependencies
-- **FastAPI Security**: Provides OAuth2 password flow
-- **Passlib**: Handles password hashing with bcrypt
-- **PyJWT**: Manages JWT token creation and validation
-- **Pydantic**: Ensures type safety in security schemas
+### Pourquoi Cette Séparation ?
 
-### Protected Resources
-All sensitive operations require authentication:
-- Film management (create, update, delete)
-- Cast management (create, update, delete)
-- User profile access
-- Data modification endpoints
+1. **Contrôle des Données** :
 
-### Security Best Practices
-1. **Password Protection**:
-   - Passwords never stored in plain text
-   - Bcrypt hashing with salt
-   - Secure password verification
+   - Les schémas d'entrée limitent ce que les utilisateurs peuvent envoyer à l'API
+   - Les schémas de sortie fournissent des données plus riches et complètes aux utilisateurs
+   - Cette séparation aide à prévenir la manipulation indésirée des données
 
-2. **Token Security**:
-   - Short-lived tokens (12-hour expiration)
-   - Secure token storage in HTTP-only cookies
-   - Protected against XSS and CSRF attacks
+2. **Gestion des Relations** :
 
-3. **Error Handling**:
-   - Secure error messages
-   - Proper HTTP status codes
-   - Validation of all user inputs
+   - Entrée : Garde les relations simples (en utilisant des identifiants ou des requêtes séparées)
+   - Sortie : Inclut des données complètes sur les relations pour une meilleure consommation des données
 
-## API Features
-- RESTful endpoints following HTTP standards
-- Comprehensive CRUD operations
-- Advanced filtering and search capabilities
-- Pagination support
-- Error handling with appropriate status codes
-- API documentation with OpenAPI/Swagger
+3. **Logique de Validation** :
 
-This architecture ensures:
-- Separation of concerns
-- Maintainable and scalable codebase
-- Secure and efficient data handling
-- Clear organization of business logic
-- Easy testing and debugging
+   - Entrée : Validation plus stricte pour la création/mise à jour des données
+   - Sortie : Structure plus flexible pour l'affichage des données
+
+4. **Sécurité** :
+
+   - Entrée : Empêche les utilisateurs de définir des champs sensibles ou calculés
+   - Sortie : Inclut des champs additionnels qui sont sûrs à exposer
+
+5. **Expérience Utilisateur** :
+
+   - Entrée : Structure plus simple pour faciliter la création/mise à jour des données
+   - Sortie : Structure plus riche pour fournir des informations complètes en une seule réponse
+
+Cette séparation des responsabilités aide à maintenir une API propre, sécurisée, et facile à utiliser tout en garantissant l'intégrité des données et une validation correcte.
+
+## Fichiers Statiques (`/static`)
+
+- Feuilles de style CSS pour le style du frontend
+- Fichiers JavaScript pour les fonctionnalités côté client
+- Images et autres assets médiatiques
+- Organisés par type (css, js, images)
+
+## Modèles (`/templates`)
+
+- Modèles HTML Jinja2 pour le rendu côté serveur
+- Inclut des modèles de base et des modèles spécifiques à chaque page
+- Supporte l'héritage des modèles et des composants réutilisables
+
+## Caractéristiques de Sécurité
+
+### Système d'Authentification
+
+L'API implémente un système d'authentification robuste utilisant JWT (JSON Web Tokens) avec stockage sécurisé des cookies :
+
+#### Processus de Connexion
+
+1. **Authentification de l'Utilisateur** :
+
+   - Les utilisateurs fournissent leur email et mot de passe via le point de terminaison `/login`
+   - Les identifiants sont validés par rapport à la base de données
+   - Les mots de passe sont vérifiés en utilisant le hachage bcrypt
+
+2. **Gestion des Tokens** :
+
+   - Après une connexion réussie, un token JWT est généré
+   - Le token contient l'email de l'utilisateur dans sa charge utile
+   - Le token est signé en utilisant l'algorithme HS256 avec une clé sécurisée
+
+3. **Sécurité des Cookies** :
+
+   - Le token est stocké dans un cookie HTTP-only nommé "authentication"
+   - Paramètres du cookie :
+     - `httponly` : True (empêche l'accès JavaScript)
+     - `secure` : True (uniquement envoyé via HTTPS)
+     - `samesite` : "strict" (prévient les attaques CSRF)
+     - `max_age` : 12 heures (expiration automatique)
+
+#### Gestion des Sessions
+
+1. **Vérification de Session Active** :
+
+   - Le système prévient les connexions multiples simultanées
+   - Vérifie l'existence d'un cookie d'authentification
+   - Retourne une erreur appropriée si une session existe déjà
+
+2. **Contrôle d'Accès** :
+
+   - Les points de terminaison protégés nécessitent une authentification valide
+   - Le token est automatiquement validé à chaque requête
+   - Les tokens invalides ou expirés génèrent des réponses 401 Non autorisé
+
+3. **Vérification du Statut de l'Utilisateur** :
+
+   - Le système vérifie si le compte utilisateur est actif
+   - Les comptes désactivés ne peuvent pas accéder aux ressources protégées
+   - Validation automatique via `get_current_active_user`
+
+#### Processus de Déconnexion
+
+1. **Fin de Session** :
+   - Le point de terminaison `/logout` gère la fin de session
+   - Le cookie d'authentification est supprimé
+   - Le serveur vérifie l'existence de la session avant la déconnexion
+
+### Bibliothèques et Dépendances
+
+- **FastAPI Security** : Fournit un flux de mot de passe OAuth2
+- **Passlib** : Gère le hachage des mots de passe avec bcrypt
+- **PyJWT** : Gère la création et la validation des tokens JWT
+- **Pydantic** : Assure la sécurité des types dans les schémas de sécurité
+
+### Ressources Protégées
+
+Toutes les opérations sensibles nécessitent une authentification :
+
+- Gestion des films (création, mise à jour, suppression)
+- Gestion du casting (création, mise à jour, suppression)
+- Accès au profil utilisateur
+- Points de terminaison de modification des données
+
+### Meilleures Pratiques de Sécurité
+
+1. **Protection des Mots de Passe** :
+
+   - Les mots de passe ne sont jamais stockés en clair
+   - Hachage bcrypt avec sel
+   - Vérification sécurisée des mots de passe
+
+2. **Sécurité des Tokens** :
+
+   - Tokens de courte durée (expiration de 12 heures)
+   - Stockage sécurisé des tokens dans des cookies HTTP-only
+   - Protection contre les attaques XSS et CSRF
+
+3. **Gestion des Erreurs** :
+
+   - Messages d'erreur sécurisés
+   - Codes d'état HTTP appropriés
+   - Validation de toutes les entrées utilisateur
+
+## Fonctionnalités de l'API
+
+- Points de terminaison REST respectant les standards HTTP
+- Opérations CRUD complètes
+- Capacites de filtrage et de recherche avancées
+- Support de la pagination
+- Gestion des erreurs avec des codes d'état appropriés
+- Documentation de l'API avec OpenAPI/Swagger
+
+Cette architecture garantit :
+
+- La séparation des responsabilités
+- Un code maintenable et extensible
+- Une gestion des données sécurisée et efficace
+- Une organisation claire de la logique métier
+- Des tests et un débogage faciles
+
