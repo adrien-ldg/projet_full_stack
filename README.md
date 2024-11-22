@@ -25,10 +25,26 @@ Nous avons récupérées ces données sur les sites [Rotten Tomatoes](https://ww
 
 
 Pour exécuter le projet vous devrez tout d'abord récupérer le projet, pour cela vous pouvez récupérer le fichier zip de notre projet
-ou faire un git pull 
+ou faire un git pull avec la commande suivante
 
+```
+git clone https://github.com/adrien-ldg/projet_full_stack.git
+```
+une fois que c'est fait il faut que vous ouvriez l'emplacement du fichier dans le terminal, puis que vous exécutiez la commande suivante
+
+```
+docker-compose up
+```
+une fois que c'est fait et que vous avez cela dans le terminal : 
+![alt text](images_readme/image.png)
+vous pourrez aller à l'adresse suivante : 
+http://localhost:5000/
+
+Bravo vous etes sur notre application web !
 ## Aperçu du Projet
 
+Ici vous pouvez voir un appercu du projet : 
+![demonstrations](images_readme/fonctionnalitees.gif)
 
 
 # Developper Guide
