@@ -1,5 +1,11 @@
-# Projet de Fullstack data : Les 200 films les plus rentables de l'histoire
+![Bannière du Projet](images_readme\oppenheimer.jpg)
 
+
+
+# Projet de Fullstack data : Les 200 films les plus rentables de l'histoire
+Dans ce README vous trouverez toutes les informations relatives au lancement de notre projet (il s'agit de notre [User Guide](#user-guide) ) ainsi qu'une analyse de notre projet et des problématiques que nous avons eues (il s'agit de notre [Developper Guide](#developper-guide)).
+
+## Préambule
 Ce projet est une API de gestion de films construite avec FastAPI, 
 offrant une plateforme robuste pour la gestion et 
 l'exploration des données cinématographiques. 
@@ -13,11 +19,19 @@ L'API fournit des informations détaillées sur les
 
 Nous avons récupérées ces données sur les sites [Rotten Tomatoes](https://www.rottentomatoes.com/) (pour chaque film) ainsi que sur le site [box office mojo](https://www.boxofficemojo.com/chart/ww_top_lifetime_gross/?ref_=bo_lnav_hm_shrt)
 
+# User Guide
+
 ## Exécution du projet
 
 
+Pour exécuter le projet vous devrez tout d'abord récupérer le projet, pour cela vous pouvez récupérer le fichier zip de notre projet
+ou faire un git pull 
 
 ## Aperçu du Projet
+
+
+
+# Developper Guide
 
 ### Principales Fonctionnalités
 
