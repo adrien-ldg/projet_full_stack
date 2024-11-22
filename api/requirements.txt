@@ -12,5 +12,5 @@ sqlalchemy
 requests
 pytest
 starlette_exporter
-passlib[bcrypt]
+passlib
 PyJWT 
