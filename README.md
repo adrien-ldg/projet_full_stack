@@ -46,7 +46,7 @@ Bravo vous etes sur notre application web !
 Ici vous pouvez voir un appercu du projet : 
 ![demonstrations](images_readme/fonctionnalitees.gif)
 
-
+Comme vous pouvez le constater sur la page d'accueil vous pouvez créer un compte, une fois que c'est fait vous pouvez vous connecter en appuyant sur le bouton sign in et en rentrant vos informations. Une fois que c'est fait vous pouvez accéder aux pages "actors" et "films". Si vous le souhaitez vous pouvez vous déconnecter à la fin. 
 # Developper Guide
 
 ### Principales Fonctionnalités
@@ -413,16 +413,29 @@ Cette séparation des responsabilités aide à maintenir une API propre, sécuri
 
 ## Fichiers Statiques (`/static`)
 
+
+
+- 7 fichiers css
 - Feuilles de style CSS pour le style du frontend
-- Fichiers JavaScript pour les fonctionnalités côté client
 - Images et autres assets médiatiques
 - Organisés par type (css, js, images)
 
 ## Modèles (`/templates`)
 
+- 7 fichiers html
 - Modèles HTML Jinja2 pour le rendu côté serveur
 - Inclut des modèles de base et des modèles spécifiques à chaque page
 - Supporte l'héritage des modèles et des composants réutilisables
+- Utilisation des routes définies dans les routers python
+
+## data_loader (`/data_loader`)
+- meme dossier models que dans l'api
+- fichier create_db qui inserre les données des fichiers csv et json vers la base de données
+- fichiers cast.csv et films.json (contiennent nos données)
+- requirements.txt
+## dockerfile et docker compose
+- permet de run et d'avoir l'application sur son pc sans se soucier des requirements et sans se soucier de l'installation de postgresql ou des problèmes de version de python et de compatibilité des librairies
+- Le Dockerfile permet de créer une image de l'application, et Docker Compose facilite la configuration de l'environnement, en automatisant la création des services nécessaires (par exemple, la base de données PostgreSQL).
 
 ## Caractéristiques de Sécurité
 
@@ -533,3 +546,12 @@ Cette architecture garantit :
 - Une organisation claire de la logique métier
 - Des tests et un débogage faciles
 
+## ressources externes : 
+Pour réaliser ce projet nous nous sommes aidés et inspirés de différentes sources :
+
+- le site de [fast api](https://fastapi.tiangolo.com/tutorial/)
+
+# Auteurs :
+Ce projet a été réalisé par Adrien Lindeberg et Grégoire Ugolini
+
+[![esiee](image-1.png)](https://www.esiee.fr/)
